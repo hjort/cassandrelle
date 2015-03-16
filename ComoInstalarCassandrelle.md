@@ -1,0 +1,56 @@
+# Adicionar dependência no Maven #
+
+Para instalar o componente basta adicionar a sua dependência no arquivo **pom.xml** da aplicação:
+
+```
+<dependencies>
+	<dependency>
+	        <groupId>br.gov.frameworkdemoiselle</groupId>
+	        <artifactId>demoiselle-cassandra</artifactId>
+	        <version>1.0.0</version>
+	</dependency>
+</dependencies>
+```
+
+# Configurar plug-in do AspectJ #
+
+Para usufruir de recursos como a injeção de dependências, é preciso também incluir o artefato `demoiselle-cassandra` nas bibliotecas do plug-in do AspectJ, tal como ilustrado a seguir:
+
+```
+<plugin>
+	<groupId>org.codehaus.mojo</groupId>
+	<artifactId>aspectj-maven-plugin</artifactId>
+	<version>1.0</version>
+	<configuration>
+	        ...
+	        <aspectLibraries>
+	                ...
+	                <aspectLibrary>
+	                        <groupId>br.gov.frameworkdemoiselle</groupId>
+	                        <artifactId>demoiselle-cassandra</artifactId>
+	                </aspectLibrary>
+	        </aspectLibraries>
+	</configuration>
+	...
+</plugin>
+```
+
+# Configurar conexão e opções do Apache Cassandra #
+
+É preciso criar (ou modificar, se já existente) o arquivo de configurações `demoiselle.properties` contendo os parâmetros indicados abaixo:
+
+```
+# server nodes hostnames and ports
+# ex: node1:9160, node2:9160, node3:9160
+demoiselle.cassandra.server_nodes = localhost:9160
+
+# default keyspace name
+demoiselle.cassandra.default_keyspace = Keyspace1
+
+# default consistency level
+# see enumerator org.apache.cassandra.thrift.ConsistencyLevel
+demoiselle.cassandra.default_consistency = QUORUM
+
+# serialize unknown classes
+demoiselle.cassandra.serialize_unknown = true
+```

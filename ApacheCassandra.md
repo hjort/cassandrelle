@@ -1,0 +1,92 @@
+# O que é NoSQL? #
+
+![http://demoiselle.sourceforge.net/component/demoiselle-cassandra/1.0.0-RC1/images/nosql-logo.png](http://demoiselle.sourceforge.net/component/demoiselle-cassandra/1.0.0-RC1/images/nosql-logo.png)
+
+**NoSQL**, acrônimo para "Not Only SQL", é um termo genérico para uma classe definida de bancos de dados que diferem do modelo clássico relacional, rompendo uma longa história de SGBDs com propriedades transacionais.
+
+Trata-se de um movimento que surgiu da necessidade de aplicações com desempenho superior e alta escalabilidade, funcionalidades que os bancos de dados relacionais não eram capazes de alcançar com facilidade.
+
+Os bancos de dados ditos NoSQL possuem as seguintes características em comum. Em geral eles são:
+  * não relacionais
+  * distribuídos
+  * horizontalmente escaláveis
+  * possuem esquemas flexíveis
+  * são replicáveis
+  * possuem APIs simples
+  * seguem o modelo BASE (e não ACID)
+
+Eis algumas implementações de bancos de dados NoSQL: Bigtable (Google), Dynamo (Amazon), Cassandra (Apache), Hypertable e CouchDB.
+
+Veja mais informações sobre NoSQL em http://nosql-database.org/.
+
+# O que é Apache Cassandra? #
+
+![http://demoiselle.sourceforge.net/component/demoiselle-cassandra/1.0.0-RC1/images/cassandra-logo.png](http://demoiselle.sourceforge.net/component/demoiselle-cassandra/1.0.0-RC1/images/cassandra-logo.png)
+
+_"A high performance, scalable, distributed storage and processing system for structured and unstructured data."_
+
+O projeto **Apache Cassandra** mantém um banco de dados altamente escalável de segunda geração, aliando a arquitetura completamente distribuída do **Dynamo da Amazon** com o modelo de dados baseado em famílias de colunas do **Bigtable da Google**.
+
+O Cassandra foi inicialmente criado pelo **Facebook**, tendo seu código fonte liberado para a **Fundação Apache** em 2008. Desde então é mantido por esta através de desenvolvedores e contribuidores de diversas empresas.
+
+Eis as referências para os trabalhos que inspiraram o desenvolvimento do Cassandra:
+  * **Bigtable**: A Distributed Storage System for Structured Data - Chang et al (Google) - 7th OSDI (2006)
+  * **Dynamo**: Amazon's Highly Available Key-value Store - DeCandia et al (Amazon.com) - ACM 21st SOSP (2007)
+
+# Um novo modelo de dados #
+
+O modelo de dados do Apache Cassandra é baseado no Google Bigtable, possuindo as seguintes nomenclaturas:
+  * **Keyspace**: agrupamento de famílias de colunas (similar a um banco de dados do modelo relacional)
+  * **Column Family**: agrupamento de colunas com ordenação fixada (similar a uma tabela)
+  * **Row Key** ou simplemente **Key**: chave que representa uma linha de colunas (similar a uma chave primária)
+  * **Column**: representação de um valor, contendo o tripleto:
+    * Nome (**Name**)
+    * Valor (**Value**)
+    * **Timestamp**
+
+Eis um exemplo de modelagem com uma família de colunas:
+
+![http://demoiselle.sourceforge.net/component/demoiselle-cassandra/1.0.0-RC1/images/datamodel1.png](http://demoiselle.sourceforge.net/component/demoiselle-cassandra/1.0.0-RC1/images/datamodel1.png)
+
+O Cassandra implementa também o conceito de **supercolunas**, isto é, colunas que carregam subcolunas. Eis um exemplo:
+
+![http://demoiselle.sourceforge.net/component/demoiselle-cassandra/1.0.0-RC1/images/datamodel2.png](http://demoiselle.sourceforge.net/component/demoiselle-cassandra/1.0.0-RC1/images/datamodel2.png)
+
+Veja mais informações sobre o modelo de dados do Cassandra em http://wiki.apache.org/cassandra/DataModel/.
+
+# O que é Thrift? #
+
+![http://demoiselle.sourceforge.net/component/demoiselle-cassandra/1.0.0-RC1/images/thrift-logo.png](http://demoiselle.sourceforge.net/component/demoiselle-cassandra/1.0.0-RC1/images/thrift-logo.png)
+
+Acessar e manipular os dados armazenados no Apache Cassandra não é uma tarefa trivial, uma vez que não existe uma linguagem de consultas _ad-hoc_ tal como SQL. Ao invés disso, é preciso utilizar uma API de baixo nível chamada **Thrift**.
+
+A API Thrift fornece interfaces para os desenvolvedores em diversas linguagens de programação, entre elas: C++, Java, Python, PHP, Ruby, Erlang, Perl, Haskell, C#, Cocoa, Smalltalk e OCaml.
+
+As seguintes funções de consulta são fornecidas pela Thrift:
+  * get(): busca por nome de coluna
+  * multiget(): por nome de coluna para um conjunto de chaves
+  * get\_slice(): por nome de coluna ou faixa de nomes (retornando colunas ou supercolunas)
+  * multiget\_slice(): um subconjunto de colunas para um conjunto de chaves
+  * get\_count(): número de colunas ou supercolunas
+  * get\_range\_slice(): subconjunto de colunas para uma faixa de chaves
+
+Também são disponibilizadas funções de modificação dos dados:
+  * insert(): inclui ou atualiza uma coluna pela chave
+  * batch\_insert(): inclui ou atualiza múltiplas colunas pela chave
+  * remove(): exclui uma coluna
+  * batch\_mutate(): funciona como batch\_insert(), mas também pode excluir (v0.6+)
+
+Veja mais informações sobre Thrift em http://incubator.apache.org/thrift/ e em http://wiki.apache.org/cassandra/API/.
+
+# O que é Hector? #
+
+**Hector** é um cliente de alto nível em linguagem Java para o Cassandra, o qual fornece:
+  * interface simples e de alto nível orientada a objetos para o Cassandra
+  * comportamento de tolerância a falhas no lado do cliente (failover)
+  * gerenciamento de pool de conexão para melhoria de desepenho e escalabilidade
+  * contadores em JMX para monitoração e gerenciamento
+  * balanceamento de carga (load balancing)
+
+Veja mais informações sobre Hector em http://prettyprint.me/2010/02/23/hector-a-java-cassandra-client/.
+
+Internamente a biblioteca Hector faz uso da API Thrift para acesso ao Cassandra. O componente Demoiselle Cassandra, por sua vez, é uma camada para o Hector (e consequentemente para a Thrift).
